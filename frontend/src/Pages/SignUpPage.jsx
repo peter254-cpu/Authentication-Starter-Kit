@@ -73,7 +73,7 @@ const SignUpPage = () => {
             required
           />
           <PassWordStrength password={password} />
-          {error && <p className="text-red-500 font-regular mt-2">{error}</p>}
+          {error && <p className="text-red-500 font-regular mt-2">{error.message}</p>}
           <ButtonComponent disabled={isLoading}>
             {isLoading ? (
               <Loader className="animate-spin mx-auto" />
