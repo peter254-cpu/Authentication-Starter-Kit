@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { motion } from "framer-motion";
 import InputComponent from "../component/InputComponent";
 import { Loader, Lock, Mail, User } from "lucide-react";
@@ -72,11 +73,12 @@ const SignUpPage = () => {
             required
           />
           <PassWordStrength password={password} />
+          {error && <p className="text-red-500 font-regular mt-2">{error}</p>}
           <ButtonComponent disabled={isLoading}>
             {isLoading ? (
               <Loader className="animate-spin mx-auto" />
             ) : (
-              "Sign uP"
+              "Sign Up"
             )}
           </ButtonComponent>
         </form>
