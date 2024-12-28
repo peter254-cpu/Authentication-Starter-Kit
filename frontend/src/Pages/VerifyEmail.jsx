@@ -10,19 +10,19 @@ const VerifyEmail = () => {
   const inputRefs = useRef([]);
   const navigate = useNavigate();
 
-  const {error, isLoading, verifyEmail } = useAuthStore();
+  const { error, isLoading, verifyEmail } = useAuthStore();
 
   const handleChange = (index, value) => {
     const newCode = [...code];
 
-    //Handle Pasted content
+    // Handle Pasted content
     if (value.length > 1) {
       const pastedCode = value.slice(0, 6).split("");
       for (let i = 0; i < 6; i++) {
         newCode[i] = pastedCode[i] || "";
       }
       setCode(newCode);
-      //Focus on the last non-empty input or the first empty one
+      // Focus on the last non-empty input or the first empty one
       const lastFilledIndex = newCode.findLastIndex((digit) => digit !== "");
       const focusIndex = lastFilledIndex < 5 ? lastFilledIndex + 1 : 5;
       inputRefs.current[focusIndex].focus();
@@ -30,7 +30,7 @@ const VerifyEmail = () => {
       newCode[index] = value;
       setCode(newCode);
 
-      //Move focus to the next input field if value is entered
+      // Move focus to the next input field if value is entered
       if (value && index < 5) {
         inputRefs.current[index + 1].focus();
       }
@@ -43,26 +43,26 @@ const VerifyEmail = () => {
     }
   };
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const verificationCode = code.join("")
-   try {
-    await verifyEmail(verificationCode);
-    navigate("/")
-    toast.success("Email Verified Successfully")
-   } catch (error) {
-    console.log(error)
-   }
+    const verificationCode = code.join("");
+    try {
+      await verifyEmail(verificationCode);
+      navigate("/");
+      toast.success("Email Verified Successfully");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  //Auto submit in event that all fields are filled
+  // Auto submit in event that all fields are filled
   useEffect(() => {
     if (code.every((digit) => digit !== "")) {
       if (code.every((digit) => digit !== "")) {
         handleSubmit(new Event("submit"));
       }
     }
-  }, code);
+  }, [code]);
 
   return (
     <div className="max-w-md bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden ">
@@ -85,17 +85,21 @@ const VerifyEmail = () => {
                 key={index}
                 ref={(el) => (inputRefs.current[index] = el)}
                 type="text"
-                maxLength="6"
+                maxLength="1"
                 value={digit}
                 onChange={(e) => handleChange(index, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(index, e)}
-                className=" border-r-amber-50 size-12 text-center text-2xl font-bold bg-gray-700 text-white border-2 focus:outline-none border-gray-300 focus:border-green-500"
+                className="border-r-amber-50 size-12 text-center text-2xl font-bold bg-gray-700 text-white border-2 focus:outline-none border-gray-300 focus:border-green-500"
               />
             ))}
           </div>
-          {error && <p className="text-red-500 font-regular mt-2">{error}</p>}
-          <ButtonComponent>
-            Verify
+          {error && <p className="text-red-500 font-regular mt-2">{error.message}</p>}
+          <ButtonComponent disabled={isLoading}>
+            {isLoading ? (
+              <Loader className="animate-spin mx-auto" />
+            ) : (
+              "Verify"
+            )}
           </ButtonComponent>
         </form>
       </motion.div>
