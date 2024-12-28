@@ -2,7 +2,7 @@ import { create } from "zustand";
 import axios from "axios";
 
 
-const API_URI = "https://authentication-starter-kit.onrender.com/auth/api";
+const API_URI = "https://authentication-starter-kit.onrender.com/api/auth";
 
 axios.defaults.withCredentials = true;
 
